@@ -66,6 +66,15 @@ class BST:
         else:
             node.right = self.insert(node.right, data)
         return node
+    def insertSortedArray(self, node, arr):
+        from math import floor
+        mdpt = int(floor(len(arr) / 2))
+        node = TNode(arr[mdpt])
+        if len(arr) > 1:
+            node.left = self.insertSortedArray(node.left, arr[:mdpt])
+            if len(arr) > 2:
+                node.right = self.insertSortedArray(node.right, arr[mdpt+1:])
+        return node
     def size(self, node):
         if node is None:
             return 0
@@ -73,7 +82,7 @@ class BST:
             return 1 + self.size(node.left) + self.size(node.right)
     def maxDepth(self, node):
         if node is None:
-            return 0
+            return -1
         else:
             leftDepth = self.maxDepth(node.left)
             rightDepth = self.maxDepth(node.right)
@@ -81,6 +90,14 @@ class BST:
                 return 1 + leftDepth
             else:
                 return 1 + rightDepth
+    def isBalanced(self, node):
+        leftDepth = self.maxDepth(node.left)
+        rightDepth = self.maxDepth(node.right)
+        from math import fabs
+        if fabs(leftDepth - rightDepth) > 1:
+            return False
+        else:
+            return True
     def minValue(self, node):
         if node is None:
             return None
@@ -109,10 +126,9 @@ class BST:
         self.insert(self.root, 3)
         self.insert(self.root, 1)
 bst = BST()
-bst.root = bst.insert(bst.root, 4)
-bst.insert(bst.root, 2)
-bst.insert(bst.root, 1)
-bst.insert(bst.root, 3)
-bst.insert(bst.root, 5)
+arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+bst.root = bst.insertSortedArray(bst.root, arr)
+print bst.isBalanced(bst.root)
 bst.printTree(bst.root)
+print bst.maxDepth(bst.root)
         
